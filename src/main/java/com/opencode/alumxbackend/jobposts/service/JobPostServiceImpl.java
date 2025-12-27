@@ -8,6 +8,11 @@ import org.springframework.stereotype.Service;
 import com.opencode.alumxbackend.users.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.net.MalformedURLException;
+import java.net.URL;
+import com.opencode.alumxbackend.common.exception.BadRequestException;
+
+
 
 // different from interface as here we are going to implement what we need
 @Service
@@ -24,7 +29,22 @@ public class JobPostServiceImpl implements JobPostService{
         if(!userRepository.existsByUsername(request.getUsername())){
             throw new IllegalArgumentException("Username does not exist: " + request.getUsername());
         }
-        
+
+        if(request.getImageUrls()!=null && request.getImageUrls().size()>5){
+            throw new IllegalArgumentException("Cannot upload more than 5 images");
+        }
+        if(request.getDescription().length()>5000 || request.getDescription().isBlank() || request.getDescription().length() < 50){
+            throw new IllegalArgumentException("Description must be between 1 and 5000 characters");
+        } 
+
+        request.getImageUrls().forEach(url -> {
+            try {
+                new URL(url); // will throw MalformedURLException if invalid
+            } catch (MalformedURLException e) {
+                throw new BadRequestException("Invalid image URL: " + url);
+            }
+        });
+
         JobPost jobPost = JobPost.builder()
                 .postId(UUID.randomUUID().toString())
                 .username(request.getUsername())
