@@ -35,4 +35,13 @@ public class GroupChatService {
 
         return repository.save(group);
     }
+
+    public GroupChat getGroupById(String groupId) {
+        return repository.findById(groupId)
+                .orElseThrow(() -> new RuntimeException("Group not found"));
+    }
+
+    public List<GroupChat> getGroupsForUser(String userId) {
+        return repository.findGroupsByUserId(userId);
+    }
 }

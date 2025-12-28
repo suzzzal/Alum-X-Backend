@@ -21,7 +21,11 @@ public class GroupChat {
     @Column(nullable = false)
     private String name;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "group_chat_participants",
+            joinColumns = @JoinColumn(name = "group_id")
+    )
     private List<Participant> participants;
 
     private LocalDateTime createdAt;
