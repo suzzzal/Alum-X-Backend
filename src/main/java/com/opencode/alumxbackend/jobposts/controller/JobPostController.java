@@ -1,6 +1,7 @@
 package com.opencode.alumxbackend.jobposts.controller;
 
 import com.opencode.alumxbackend.common.exception.Errors.UnauthorizedAccessException;
+import com.opencode.alumxbackend.jobposts.dto.CommentRequest;
 import com.opencode.alumxbackend.jobposts.dto.JobPostRequest;
 import com.opencode.alumxbackend.jobposts.dto.JobPostResponse;
 import com.opencode.alumxbackend.jobposts.model.JobPost;
@@ -46,5 +47,13 @@ public class JobPostController {
                 "username", savedPost.getUsername(),
                 "createdAt", savedPost.getCreatedAt()
         ));
+    }
+    @PostMapping("/jobs/{postId}/comment")
+    public ResponseEntity<String> addComment(
+            @PathVariable String postId,
+            @RequestParam Long userId,
+            @Valid @RequestBody CommentRequest request){
+        jobPostService.addComment(postId,userId,request);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Comment added successfully");
     }
 }
