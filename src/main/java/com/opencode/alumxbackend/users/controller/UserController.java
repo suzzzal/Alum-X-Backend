@@ -1,5 +1,6 @@
 package com.opencode.alumxbackend.users.controller;
 
+import com.opencode.alumxbackend.users.dto.UserProfileDTO;
 import com.opencode.alumxbackend.users.dto.UserRequest;
 import com.opencode.alumxbackend.users.model.User;
 
@@ -41,5 +42,12 @@ public class UserController {
                 "userId", user.getId(),
                 "role", user.getRole().name()
         ));
+    }
+
+    @GetMapping("/{userId}/profile")
+    public ResponseEntity<UserProfileDTO> getProfile(@PathVariable Long userId){
+        return userService.getUserProfile(userId)
+                .map(profile -> ResponseEntity.ok(profile))
+                .orElseGet(()->ResponseEntity.notFound().build());
     }
 }
