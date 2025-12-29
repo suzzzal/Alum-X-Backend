@@ -1,13 +1,14 @@
 package com.opencode.alumxbackend.groupchatmessages.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
 public class SendGroupMessageRequest {
 
-    @NotBlank(message = "User ID is required")
+    @NotNull(message = "User ID is required")
     private Long userId;
 
     @NotBlank(message = "Message content cannot be empty")
