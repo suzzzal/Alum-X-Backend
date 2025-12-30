@@ -62,7 +62,7 @@ public class JobPostController {
     @DeleteMapping("/jobs/{jobId}")
     public ResponseEntity<?> deleteJobPost(
             @RequestHeader(value = "X-DUMMY-TOKEN", required = false) String token,
-            @PathVariable String jobId,
+            @PathVariable Long jobId,
             @RequestParam Long userId
     ) {
         // TODO: Replace @RequestParam userId with @AuthenticationPrincipal once JWT auth is implemented

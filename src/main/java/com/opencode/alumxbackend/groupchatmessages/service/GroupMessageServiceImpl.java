@@ -27,8 +27,7 @@ public class GroupMessageServiceImpl implements GroupMessageService {
 
     public GroupMessageResponse sendMessage(
             Long groupId,
-            SendGroupMessageRequest request
-    ) {
+            SendGroupMessageRequest request) {
 
         GroupChat group = groupChatRepository.findById(groupId)
                 .orElseThrow(() -> new GroupNotFoundException("Group id not found " + groupId));
@@ -36,7 +35,6 @@ public class GroupMessageServiceImpl implements GroupMessageService {
         boolean isMember = group.getParticipants()
                 .stream()
                 .anyMatch(p -> p.getUserId().equals(request.getUserId()));
-
 
         if (!isMember) {
             throw new UserNotMemberException(request.getUserId());
@@ -66,8 +64,7 @@ public class GroupMessageServiceImpl implements GroupMessageService {
     @Override
     public List<GroupMessageResponse> fetchMessages(
             Long groupId,
-            Long userId
-    ) {
+            Long userId) {
 
         GroupChat group = groupChatRepository.findById(groupId)
                 .orElseThrow(() -> new RuntimeException("Group not found"));
@@ -95,16 +92,15 @@ public class GroupMessageServiceImpl implements GroupMessageService {
                 .createdAt(message.getCreatedAt())
                 .build();
     }
+
     @Override
     public List<GroupMessageResponse> getAllGroupMessages(Long groupId) {
         groupChatRepository.findById(groupId)
-            .orElseThrow(() -> new GroupNotFoundException("Group id not found: " + groupId));
-    
+                .orElseThrow(() -> new GroupNotFoundException("Group id not found: " + groupId));
+
         return messageRepository.findByGroupIdOrderByCreatedAtAsc(groupId)
                 .stream()
                 .map(this::mapToResponse)
                 .toList();
-    }           
-}
-
+    }
 }
